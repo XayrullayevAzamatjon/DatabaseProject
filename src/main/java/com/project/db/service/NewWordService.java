@@ -49,6 +49,7 @@ public class NewWordService {
         NewWord byId = findById(newWordUpdateRequest.wordId());
         byId.setWritten_form(newWordUpdateRequest.writtenForm());
         byId.setPart_of_speech(newWordUpdateRequest.partOfSpeech());
+        byId.setDefinition(newWordUpdateRequest.defination());
         return NewWord2NewWordResponse(byId);
     }
 
@@ -56,7 +57,7 @@ public class NewWordService {
     public NewWordResponse NewWord2NewWordResponse(NewWord newWord){
         return new NewWordResponse(
                 newWord.getWord_Id(), newWord.getUser().getId(), newWord.getWritten_form(),
-                newWord.getPart_of_speech(), newWord.getStatus(),
+                newWord.getPart_of_speech(), newWord.getDefinition(), newWord.getStatus(),
                 newWord.getCreated_date(), newWord.getConfirmed_date()
         );
     }
@@ -75,6 +76,7 @@ public class NewWordService {
         newWord.setUser(user);
         newWord.setWritten_form(newWordCreateRequest.writtenForm());
         newWord.setPart_of_speech(newWordCreateRequest.partOfSpeech());
+        newWord.setDefinition(newWordCreateRequest.definition());
         newWord.setStatus(Statuus.REQUESTED);
         newWord.setCreated_date(time);
         newWord.setConfirmed_date(time);
