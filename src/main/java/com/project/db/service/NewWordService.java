@@ -46,9 +46,9 @@ public class NewWordService {
     }
 
     public NewWordResponse updateNewWord(NewWordUpdateRequest newWordUpdateRequest){
-        NewWord byId = findById(newWordUpdateRequest.word_id());
-        byId.setWritten_form(newWordUpdateRequest.written_form());
-        byId.setPart_of_speech(newWordUpdateRequest.part_of_speech());
+        NewWord byId = findById(newWordUpdateRequest.wordId());
+        byId.setWritten_form(newWordUpdateRequest.writtenForm());
+        byId.setPart_of_speech(newWordUpdateRequest.partOfSpeech());
         return NewWord2NewWordResponse(byId);
     }
 
