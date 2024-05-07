@@ -4,6 +4,7 @@ import com.project.db.entity.NewWord;
 import com.project.db.entity.User;
 import com.project.db.model.request.UserCreateRequest;
 import com.project.db.model.request.UserUpdateRequest;
+import com.project.db.model.response.NewWordResponse;
 import com.project.db.model.response.UserResponse;
 import com.project.db.repositpry.UserRepository;
 import com.project.db.utils.Role;
@@ -51,9 +52,10 @@ public class UserService {
         return User2UserResponse(user);
     }
 
-    public List<NewWord> showNewWords(String Id){
-        User user = findById(Id);
-        return user.getNewWordList();
+    public List<NewWordResponse> showNewWords(String Id){
+        return findById(Id).getNewWordList().stream()
+                .map(this::NewWord2NewWordResponse)
+                .toList();
     }
 
     public User CreateRequest2User(UserCreateRequest userCreateRequest){
@@ -75,6 +77,14 @@ public class UserService {
         return new UserResponse(
                 user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(),
                 user.getScore(), user.getRole(), user.getJoined_date()
+        );
+    }
+
+    public NewWordResponse NewWord2NewWordResponse(NewWord newWord){
+        return new NewWordResponse(
+                newWord.getWord_Id(), newWord.getUser().getId(), newWord.getWritten_form(),
+                newWord.getPart_of_speech(), newWord.getStatus(),
+                newWord.getCreated_date(), newWord.getConfirmed_date()
         );
     }
 }
