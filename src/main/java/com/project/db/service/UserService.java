@@ -1,7 +1,6 @@
 package com.project.db.service;
 
-import com.project.db.entity.NewWord;
-import com.project.db.entity.User;
+import com.project.db.entity.*;
 import com.project.db.model.request.UserCreateRequest;
 import com.project.db.model.request.UserUpdateRequest;
 import com.project.db.model.response.NewWordResponse;
@@ -87,4 +86,5 @@ public class UserService {
                 newWord.getCreated_date(), newWord.getConfirmed_date()
         );
     }
+
 }
