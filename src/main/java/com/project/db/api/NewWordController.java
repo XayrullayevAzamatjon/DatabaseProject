@@ -18,6 +18,7 @@ public class NewWordController {
         this.newWordService = newWordService;
     }
 
+
     @GetMapping("{id}")
     public NewWordResponse findById(@PathVariable String id){
         NewWord byId = newWordService.findById(id);
@@ -37,6 +38,10 @@ public class NewWordController {
     @PutMapping("/update")
     public NewWordResponse updateNewWord(@RequestBody NewWordUpdateRequest newWordUpdateRequest){
         return newWordService.updateNewWord(newWordUpdateRequest);
+    }
+    @GetMapping("/requested")
+    public List<NewWordResponse> findAllRequestedWords(){
+        return newWordService.findAllRequestedWords();
     }
 
 

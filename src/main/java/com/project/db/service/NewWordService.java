@@ -5,9 +5,9 @@ import com.project.db.entity.User;
 import com.project.db.model.request.NewWordCreateRequest;
 import com.project.db.model.request.NewWordUpdateRequest;
 import com.project.db.model.response.NewWordResponse;
-import com.project.db.repositpry.NewWordRepository;
-import com.project.db.repositpry.UserRepository;
-import com.project.db.utils.Statuus;
+import com.project.db.repository.NewWordRepository;
+import com.project.db.repository.UserRepository;
+import com.project.db.utils.Status;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -47,37 +47,43 @@ public class NewWordService {
 
     public NewWordResponse updateNewWord(NewWordUpdateRequest newWordUpdateRequest){
         NewWord byId = findById(newWordUpdateRequest.wordId());
-        byId.setWritten_form(newWordUpdateRequest.writtenForm());
-        byId.setPart_of_speech(newWordUpdateRequest.partOfSpeech());
+        byId.setWrittenForm(newWordUpdateRequest.writtenForm());
+        byId.setPartOfSpeech(newWordUpdateRequest.partOfSpeech());
         return NewWord2NewWordResponse(byId);
+    }
+
+    public List<NewWordResponse> findAllRequestedWords(){
+        return  newWordRepository.findAllRequestedWords().stream().map(this::NewWord2NewWordResponse).toList();
+
     }
 
 
     public NewWordResponse NewWord2NewWordResponse(NewWord newWord){
         return new NewWordResponse(
-                newWord.getWord_Id(), newWord.getUser().getId(), newWord.getWritten_form(),
+                newWord.getWordId(), newWord.getUser().getId(), newWord.getWrittenForm(),
                 newWord.getPart_of_speech(), newWord.getStatus(),
-                newWord.getCreated_date(), newWord.getConfirmed_date()
+                newWord.getCreatedDate(), newWord.getConfirmedDate()
         );
     }
 
-    public NewWord NewWordCreateRequest2NewWord (NewWordCreateRequest newWordCreateRequest){
+    public NewWord NewWordCreateRequest2NewWord (NewWordCreateRequest request){
         UUID uuid = UUID.randomUUID();
         LocalDateTime time = LocalDateTime.now();
         NewWord newWord = new NewWord();
-        newWord.setWord_Id(uuid.toString());
+        newWord.setWordId(uuid.toString());
         User user = userRepository.findById(
-                        newWordCreateRequest.userId())
+                        request.userId())
                 .orElseThrow(
-                        () -> new RuntimeException("User not found with id " + newWordCreateRequest.userId()
+                        () -> new RuntimeException("User not found with id " + request.userId()
                         )
                 );
         newWord.setUser(user);
-        newWord.setWritten_form(newWordCreateRequest.writtenForm());
-        newWord.setPart_of_speech(newWordCreateRequest.partOfSpeech());
-        newWord.setStatus(Statuus.REQUESTED);
-        newWord.setCreated_date(time);
-        newWord.setConfirmed_date(time);
+        newWord.setWrittenForm(request.writtenForm());
+        newWord.setPartOfSpeech(request.partOfSpeech());
+        newWord.setStatus(Status.REQUESTED);
+        newWord.setCreatedDate(time);
+        newWord.setDefinition(request.definition());
+        newWord.setConfirmedDate(time);
         return newWord;
     }
 }

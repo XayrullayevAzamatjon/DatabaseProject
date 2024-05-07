@@ -1,44 +1,46 @@
 package com.project.db.entity;
 
-import com.project.db.utils.Part_of_speech;
-import com.project.db.utils.Statuus;
+import com.project.db.utils.PartOfSpeech;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
+import  com.project.db.utils.Status;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "New_word")
 public class NewWord {
     @Id
-    private String Word_Id;
+    private String wordId;
     @ManyToOne
     @JsonIgnore
     private User user;
 
     @Column(name = "written_form")
-    private String Written_form;
+    private String writtenForm;
 
-    private String Definition;
+    private String definition;
 
     @Column(name = "part_of_speech")
-    private com.project.db.utils.Part_of_speech Part_of_speech;
+    @Enumerated(EnumType.STRING)
+    private PartOfSpeech partOfSpeech;
 
-    private Statuus Status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "word_status")
+    private Status status;
 
 
     @Column(name = "created_date")
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
 
     @Column(name = "confirmed_date")
-    private LocalDateTime confirmed_date;
+    private LocalDateTime confirmedDate;
 
-    public String getWord_Id() {
-        return Word_Id;
+    public String getWordId() {
+        return wordId;
     }
 
-    public void setWord_Id(String word_Id) {
-        Word_Id = word_Id;
+    public void setWordId(String wordId) {
+        this.wordId = wordId;
     }
 
     public User getUser() {
@@ -49,52 +51,52 @@ public class NewWord {
         this.user = user;
     }
 
-    public String getWritten_form() {
-        return Written_form;
+    public String getWrittenForm() {
+        return writtenForm;
     }
 
     public String getDefinition() {
-        return Definition;
+        return definition;
     }
 
     public void setDefinition(String definition) {
-        Definition = definition;
+        this.definition = definition;
     }
 
-    public void setWritten_form(String written_form) {
-        Written_form = written_form;
+    public void setWrittenForm(String writtenForm) {
+        this.writtenForm = writtenForm;
     }
 
-    public Part_of_speech getPart_of_speech() {
-        return Part_of_speech;
+    public PartOfSpeech getPart_of_speech() {
+        return partOfSpeech;
     }
 
-    public void setPart_of_speech(Part_of_speech part_of_speech) {
-        Part_of_speech = part_of_speech;
+    public void setPartOfSpeech(PartOfSpeech partOfSpeech) {
+        this.partOfSpeech = partOfSpeech;
     }
 
-    public Statuus getStatus() {
-        return Status;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setStatus(Statuus status) {
-        Status = status;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
-    public LocalDateTime getCreated_date() {
-        return created_date;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreated_date(LocalDateTime created_date) {
-        this.created_date = created_date;
+    public void setCreatedDate(LocalDateTime created_date) {
+        this.createdDate = created_date;
     }
 
-    public LocalDateTime getConfirmed_date() {
-        return confirmed_date;
+    public LocalDateTime getConfirmedDate() {
+        return confirmedDate;
     }
 
-    public void setConfirmed_date(LocalDateTime confirmed_date) {
-        this.confirmed_date = confirmed_date;
+    public void setConfirmedDate(LocalDateTime confirmed_date) {
+        this.confirmedDate = confirmed_date;
     }
 
 }

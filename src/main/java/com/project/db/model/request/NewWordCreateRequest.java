@@ -1,7 +1,7 @@
 package com.project.db.model.request;
 
-import com.project.db.utils.Part_of_speech;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.db.utils.PartOfSpeech;
 
 
 public record NewWordCreateRequest(
@@ -12,6 +12,6 @@ public record NewWordCreateRequest(
         @JsonProperty("definition")
         String definition,
         @JsonProperty("part_of_speech")
-        Part_of_speech partOfSpeech) {
+        PartOfSpeech partOfSpeech) {
 
 }

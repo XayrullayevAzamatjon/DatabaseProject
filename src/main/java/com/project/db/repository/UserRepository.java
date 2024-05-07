@@ -1,4 +1,4 @@
-package com.project.db.repositpry;
+package com.project.db.repository;
 
 import com.project.db.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

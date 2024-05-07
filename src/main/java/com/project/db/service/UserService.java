@@ -5,7 +5,7 @@ import com.project.db.model.request.UserCreateRequest;
 import com.project.db.model.request.UserUpdateRequest;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.model.response.UserResponse;
-import com.project.db.repositpry.UserRepository;
+import com.project.db.repository.UserRepository;
 import com.project.db.utils.Role;
 import org.springframework.stereotype.Service;
 
@@ -81,9 +81,9 @@ public class UserService {
 
     public NewWordResponse NewWord2NewWordResponse(NewWord newWord){
         return new NewWordResponse(
-                newWord.getWord_Id(), newWord.getUser().getId(), newWord.getWritten_form(),
+                newWord.getWordId(), newWord.getUser().getId(), newWord.getWrittenForm(),
                 newWord.getPart_of_speech(), newWord.getStatus(),
-                newWord.getCreated_date(), newWord.getConfirmed_date()
+                newWord.getCreatedDate(), newWord.getConfirmedDate()
         );
     }
 

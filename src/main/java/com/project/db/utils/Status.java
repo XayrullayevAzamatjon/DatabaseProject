@@ -1,6 +1,6 @@
 package com.project.db.utils;
 
-public enum Statuus {
+public enum Status {
     REQUESTED,
     CONFIRMED,
     DENIED
