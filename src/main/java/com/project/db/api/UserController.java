@@ -1,9 +1,9 @@
 package com.project.db.api;
 
-import com.project.db.entity.NewWord;
 import com.project.db.entity.User;
 import com.project.db.model.request.UserCreateRequest;
 import com.project.db.model.request.UserUpdateRequest;
+import com.project.db.model.response.NewWordResponse;
 import com.project.db.model.response.UserResponse;
 import com.project.db.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/new-words/{Id}")
-    public List<NewWord> showNewWords(@PathVariable String Id){
+    public List<NewWordResponse> showNewWords(@PathVariable String Id){
         return userService.showNewWords(Id);
     }
 }
