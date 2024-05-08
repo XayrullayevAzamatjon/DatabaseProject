@@ -67,7 +67,7 @@ public class NewWord {
         this.writtenForm = writtenForm;
     }
 
-    public PartOfSpeech getPart_of_speech() {
+    public PartOfSpeech getPartOfSpeech() {
         return partOfSpeech;
     }
 

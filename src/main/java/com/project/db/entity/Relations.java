@@ -23,4 +23,35 @@ public class Relations {
     @Column(name = "relType")
     private String relType;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Synset getSynset() {
+        return synset;
+    }
+
+    public void setSynset(Synset synset) {
+        this.synset = synset;
+    }
+
+    public Synset getTargetSynset() {
+        return targetSynset;
+    }
+
+    public void setTargetSynset(Synset targetSynset) {
+        this.targetSynset = targetSynset;
+    }
+
+    public String getRelType() {
+        return relType;
+    }
+
+    public void setRelType(String relType) {
+        this.relType = relType;
+    }
 }
