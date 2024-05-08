@@ -29,4 +29,9 @@ public class AdminController {
     public Status confirmNewWord(@PathVariable String newWordId){
         return adminService.confirmNewWord(newWordId);
     }
+
+    @GetMapping("/denied/{newWordId}")
+    public Status deniedNewWord(@PathVariable String newWordId){
+        return adminService.deniedNewWOrd(newWordId);
+    }
 }

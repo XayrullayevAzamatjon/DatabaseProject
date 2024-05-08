@@ -44,6 +44,13 @@ public class AdminService {
         );
     }
 
+    public Status deniedNewWOrd(String newWordId){
+        NewWord newWord = newWordRepository.findById(newWordId).get();
+        newWord.setStatus(Status.DENIED);
+        newWordRepository.save(newWord);
+        return newWord.getStatus();
+    }
+
     @Transactional
     public Status confirmNewWord(String newWordId){
         NewWord newWord = newWordRepository.findById(newWordId).get();
