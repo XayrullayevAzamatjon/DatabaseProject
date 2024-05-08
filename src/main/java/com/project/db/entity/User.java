@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "_users")
@@ -28,6 +29,22 @@ public class User {
     Role role;
     @Column(name = "joined_date")
     LocalDateTime joined_date;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_word",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "sense_id")
+    )
+    Set<Sense> userSense;
+
+    public Set<Sense> getUserSense() {
+        return userSense;
+    }
+
+    public void setUserSense(Set<Sense> userSense) {
+        this.userSense = userSense;
+    }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<NewWord> newWordList = new ArrayList<>();
