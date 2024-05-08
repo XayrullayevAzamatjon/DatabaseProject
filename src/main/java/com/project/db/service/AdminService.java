@@ -8,6 +8,7 @@ import com.project.db.utils.Status;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +47,9 @@ public class AdminService {
 
     public Status deniedNewWOrd(String newWordId){
         NewWord newWord = newWordRepository.findById(newWordId).get();
+        LocalDateTime time = LocalDateTime.now();
         newWord.setStatus(Status.DENIED);
+        newWord.setConfirmedDate(time);
         newWordRepository.save(newWord);
         return newWord.getStatus();
     }
