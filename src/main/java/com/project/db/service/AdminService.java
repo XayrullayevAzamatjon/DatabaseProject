@@ -27,4 +27,5 @@ public class AdminService {
                 newWord.getCreatedDate(), newWord.getConfirmedDate()
         );
     }
+
 }

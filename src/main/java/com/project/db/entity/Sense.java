@@ -1,6 +1,8 @@
 package com.project.db.entity;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "Sense")
 public class Sense {
@@ -16,6 +18,17 @@ public class Sense {
     @ManyToOne
     @JoinColumn(name = "Synset_id", referencedColumnName = "Synset_id")
     private Synset synset;
+
+    @ManyToMany(mappedBy = "userSense")
+    private Set<User> userSet;
+
+    public Set<User> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(Set<User> userSet) {
+        this.userSet = userSet;
+    }
 
     public String getSenseId() {
         return senseId;
