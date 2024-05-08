@@ -82,7 +82,7 @@ public class UserService {
     public NewWordResponse NewWord2NewWordResponse(NewWord newWord){
         return new NewWordResponse(
                 newWord.getWordId(), newWord.getUser().getId(), newWord.getWrittenForm(),
-                newWord.getPart_of_speech(), newWord.getDefinition(), newWord.getStatus(),
+                newWord.getPartOfSpeech(), newWord.getDefinition(), newWord.getStatus(),
                 newWord.getCreatedDate(), newWord.getConfirmedDate()
         );
     }

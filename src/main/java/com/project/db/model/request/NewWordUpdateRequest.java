@@ -7,6 +7,5 @@ public record NewWordUpdateRequest(
         @JsonProperty(namespace = "word_id") String wordId,
         @JsonProperty(namespace = "written_form") String writtenForm,
         @JsonProperty(namespace = "part_of_speech") PartOfSpeech partOfSpeech,
-        @JsonProperty("definition")
-        String definition) {
+        @JsonProperty("definition") String definition) {
 }
