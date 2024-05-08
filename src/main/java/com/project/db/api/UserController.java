@@ -41,8 +41,8 @@ public class UserController {
         return userService.update(userUpdateRequest);
     }
 
-    @GetMapping("/new-words/{Id}")
-    public List<NewWordResponse> showNewWords(@PathVariable String Id){
-        return userService.showNewWords(Id);
+    @GetMapping("/new-words/{userId}")
+    public List<NewWordResponse> showNewWords(@PathVariable String userId){
+        return userService.showNewWords(userId);
     }
 }

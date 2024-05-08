@@ -1,9 +1,7 @@
 package com.project.db.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.project.db.utils.PartOfSpeech;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Synset")
@@ -14,7 +12,8 @@ public class Synset {
     private String synsetId;
 
     @Column(name = "PartOfSpeech")
-    private String partOfSpeech;
+    @Enumerated(EnumType.STRING)
+    private PartOfSpeech partOfSpeech;
 
 
     @Column(name = "Definition")
@@ -29,11 +28,11 @@ public class Synset {
         this.synsetId = synsetId;
     }
 
-    public String getPartOfSpeech() {
+    public PartOfSpeech getPartOfSpeech() {
         return partOfSpeech;
     }
 
-    public void setPartOfSpeech(String partOfSpeech) {
+    public void setPartOfSpeech(PartOfSpeech partOfSpeech) {
         this.partOfSpeech = partOfSpeech;
     }
 

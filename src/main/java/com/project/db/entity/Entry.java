@@ -1,9 +1,7 @@
 package com.project.db.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.project.db.utils.PartOfSpeech;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Entry")
@@ -17,7 +15,8 @@ public class Entry {
     private String writtenForm;
 
     @Column(name = "PartOfSpeech")
-    private String partOfSpeech;
+    @Enumerated(EnumType.STRING)
+    private PartOfSpeech partOfSpeech;
 
     public String getEntryId() {
         return entryId;
@@ -35,11 +34,11 @@ public class Entry {
         this.writtenForm = writtenForm;
     }
 
-    public String getPartOfSpeech() {
+    public PartOfSpeech getPartOfSpeech() {
         return partOfSpeech;
     }
 
-    public void setPartOfSpeech(String partOfSpeech) {
+    public void setPartOfSpeech(PartOfSpeech partOfSpeech) {
         this.partOfSpeech = partOfSpeech;
     }
 }
