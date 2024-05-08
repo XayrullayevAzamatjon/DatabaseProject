@@ -44,5 +44,4 @@ public class NewWordController {
         return newWordService.findAllRequestedWords();
     }
 
-
 }
