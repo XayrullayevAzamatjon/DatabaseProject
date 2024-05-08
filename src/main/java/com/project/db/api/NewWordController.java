@@ -39,9 +39,6 @@ public class NewWordController {
     public NewWordResponse updateNewWord(@RequestBody NewWordUpdateRequest newWordUpdateRequest){
         return newWordService.updateNewWord(newWordUpdateRequest);
     }
-    @GetMapping("/requested")
-    public List<NewWordResponse> findAllRequestedWords(){
-        return newWordService.findAllRequestedWords();
-    }
+
 
 }

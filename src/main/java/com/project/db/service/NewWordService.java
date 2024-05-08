@@ -53,12 +53,6 @@ public class NewWordService {
         return NewWord2NewWordResponse(byId);
     }
 
-    public List<NewWordResponse> findAllRequestedWords(){
-        return  newWordRepository.findAllRequestedWords().stream().map(this::NewWord2NewWordResponse).toList();
-
-    }
-
-
     public NewWordResponse NewWord2NewWordResponse(NewWord newWord){
         return new NewWordResponse(
                 newWord.getWordId(), newWord.getUser().getId(), newWord.getWrittenForm(),
