@@ -11,6 +11,7 @@ public record NewWordResponse(
         @JsonProperty(namespace = "user_id") String userId,
         @JsonProperty(namespace = "written_form") String writtenForm,
         @JsonProperty(namespace = "part_of_speech") PartOfSpeech partOfSpeech,
+        @JsonProperty("definition") String definition,
         @JsonProperty(namespace = "status") Status status,
         @JsonProperty(namespace = "created_date") LocalDateTime createdDate,
         @JsonProperty(namespace = "confirmed_date") LocalDateTime confirmedDate) {
