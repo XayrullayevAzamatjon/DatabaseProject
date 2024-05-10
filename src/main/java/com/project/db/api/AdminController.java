@@ -2,7 +2,9 @@ package com.project.db.api;
 
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.service.AdminService;
+import com.project.db.utils.Status;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +23,14 @@ public class AdminController {
     @GetMapping("/requested")
     public List<NewWordResponse> findAllRequestedWords(){
         return adminService.findAllRequestedWords();
+    }
+    @GetMapping("/search/{query}")
+    public List<NewWordResponse> findAllSearchedWords(@PathVariable String query){
+        return adminService.searchNewWords(query);
+    }
+    @GetMapping("/status/{status}")
+    public List<NewWordResponse> findAllStatusWords(@PathVariable Status status){
+        return adminService.findByStatus(status);
     }
 
 }
