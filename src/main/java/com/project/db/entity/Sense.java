@@ -1,6 +1,7 @@
 package com.project.db.entity;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Sense {
     private Synset synset;
 
     @ManyToMany(mappedBy = "userSense")
-    private Set<User> userSet;
+    private Set<User> userSet=new HashSet<>();
 
     public Set<User> getUserSet() {
         return userSet;

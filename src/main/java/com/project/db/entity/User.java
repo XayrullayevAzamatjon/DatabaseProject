@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "sense_id")
     )
-    Set<Sense> userSense;
+    Set<Sense> userSense = new HashSet<>();
 
     public Set<Sense> getUserSense() {
         return userSense;

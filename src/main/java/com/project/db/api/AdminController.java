@@ -33,4 +33,13 @@ public class AdminController {
         return adminService.findByStatus(status);
     }
 
+    @GetMapping("/confirm/{newWordId}")
+    public Status confirmNewWord(@PathVariable String newWordId){
+        return adminService.confirmNewWord(newWordId);
+    }
+
+    @GetMapping("/denied/{newWordId}")
+    public Status deniedNewWord(@PathVariable String newWordId){
+        return adminService.deniedNewWOrd(newWordId);
+    }
 }
