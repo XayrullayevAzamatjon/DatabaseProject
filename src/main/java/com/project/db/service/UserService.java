@@ -1,12 +1,16 @@
 package com.project.db.service;
 
 import com.project.db.entity.*;
+import com.project.db.error.AlreadyExistsException;
+import com.project.db.error.NotFoundException;
 import com.project.db.model.request.UserCreateRequest;
 import com.project.db.model.request.UserUpdateRequest;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.model.response.UserResponse;
 import com.project.db.repository.UserRepository;
 import com.project.db.utils.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +21,8 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -25,7 +31,7 @@ public class UserService {
     public User findById(String Id) {
 
         return userRepository.findById(Id).orElseThrow(
-                ()-> new RuntimeException("User Not Found"));
+                ()-> new NotFoundException("User Not Found with Id: " + Id));
     }
 
     public List<UserResponse> findAllUsers(){
@@ -36,18 +42,24 @@ public class UserService {
     }
 
     public UserResponse create(UserCreateRequest userCreateRequest){
+        if (userRepository.existsByEmail(userCreateRequest.email())) {
+            LOGGER.error("User already exists with email: {}", userCreateRequest.email());
+            throw new AlreadyExistsException("User with email " + userCreateRequest.email() + " already exists");
+        }
         User user = CreateRequest2User(userCreateRequest);
         userRepository.save(user);
+        LOGGER.info("User created with id {}", user.getId());
         return User2UserResponse(user);
     }
 
-    public UserResponse update(UserUpdateRequest userUpdateRequest){
-        User user = findById(userUpdateRequest.Id());
-        user.setFirstName(userUpdateRequest.firstName());
-        user.setLastName(userUpdateRequest.lastName());
-        user.setEmail(userUpdateRequest.email());
-        user.setPassword(userUpdateRequest.password());
+    public UserResponse update(UserUpdateRequest updateRequest){
+        User user = findById(updateRequest.Id());
+        user.setFirstName(updateRequest.firstName());
+        user.setLastName(updateRequest.lastName());
+        user.setEmail(updateRequest.email());
+        user.setPassword(updateRequest.password());
         userRepository.save(user);
+        LOGGER.info("User updated with id {}", user.getId());
         return User2UserResponse(user);
     }
 
@@ -57,25 +69,25 @@ public class UserService {
                 .toList();
     }
 
-    public User CreateRequest2User(UserCreateRequest userCreateRequest){
+    public User CreateRequest2User(UserCreateRequest request){
         User user = new User();
         UUID uuid = UUID.randomUUID();
         user.setId(uuid.toString());
-        user.setFirstName(userCreateRequest.firstName());
-        user.setLastName(userCreateRequest.lastName());
-        user.setEmail(userCreateRequest.email());
-        user.setPassword(userCreateRequest.password());
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        user.setEmail(request.email());
+        user.setPassword(request.password());
         user.setRole(Role.USER);
-        user.setScore(0D);
+        user.setScore(0L);
         LocalDateTime time = LocalDateTime.now();
-        user.setJoined_date(time);
+        user.setJoinedDate(time);
         return user;
     }
 
     public UserResponse User2UserResponse(User user){
         return new UserResponse(
                 user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(),
-                user.getScore(), user.getRole(), user.getJoined_date()
+                user.getScore(), user.getRole(), user.getJoinedDate()
         );
     }
 

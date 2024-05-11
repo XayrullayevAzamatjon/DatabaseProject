@@ -1,6 +1,7 @@
 package com.project.db.service;
 
 import com.project.db.entity.*;
+import com.project.db.error.NotFoundException;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.repository.*;
 import com.project.db.utils.Status;
@@ -60,9 +61,12 @@ public class AdminService {
     }
 
     public Status deniedNewWOrd(String newWordId){
-        NewWord newWord = newWordRepository.findById(newWordId).orElse(null);
+        NewWord newWord = newWordRepository
+                .findById(newWordId)
+                .orElseThrow(
+                        ()->new NotFoundException("Word with id " + newWordId + " not found")
+                );
         LocalDateTime time = LocalDateTime.now();
-        assert newWord != null;
         newWord.setStatus(Status.DENIED);
         newWord.setConfirmedDate(time);
         newWordRepository.save(newWord);
@@ -71,8 +75,10 @@ public class AdminService {
 
     @Transactional
     public Status confirmNewWord(String newWordId){
-        NewWord newWord = newWordRepository.findById(newWordId).orElse(null);
-        assert newWord != null;
+        NewWord newWord = newWordRepository.findById(newWordId)
+                .orElseThrow(
+                        ()->new NotFoundException("Word with id " + newWordId + " not found")
+                );
         newWord.setStatus(Status.CONFIRMED);
         newWordRepository.save(newWord);
 

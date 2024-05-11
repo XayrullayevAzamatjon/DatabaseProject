@@ -10,7 +10,7 @@ public record UserResponse(
         @JsonProperty(namespace = "first_name") String firstName,
         @JsonProperty(namespace = "last_name") String lastName,
         @JsonProperty(namespace = "email") String email,
-        @JsonProperty(namespace = "score") Double score,
+        @JsonProperty(namespace = "score") Long score,
         @JsonProperty(namespace = "role") Role role,
         @JsonProperty(namespace = "joined_date") LocalDateTime joinedDate) {
 }

@@ -14,23 +14,17 @@ import java.util.Set;
 @Table(name = "_users")
 public class User {
     @Id
-    String Id;
-    @Column(name = "first_name")
-    String FirstName;
-    @Column(name = "last_name")
-    String LastName;
-    @Column(name = "email")
-    String Email;
-    @Column(name = "password")
-    String Password;
-    @Column(name = "score")
-    Double Score;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    Role role;
-    @Column(name = "joined_date")
-    LocalDateTime joined_date;
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
 
+    private Long score;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private LocalDateTime joinedDate;
     @ManyToMany
     @JoinTable(
             name = "user_word",
@@ -50,52 +44,54 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<NewWord> newWordList = new ArrayList<>();
 
+
+
+    public Long getScore() {
+        return score;
+    }
+
+    public void setScore(Long score) {
+        this.score = score;
+    }
+
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getFirstName() {
-        return FirstName;
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
-        FirstName = firstName;
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
-    }
-
-    public Double getScore() {
-        return Score;
-    }
-
-    public void setScore(Double score) {
-        Score = score;
+        this.password = password;
     }
 
     public Role getRole() {
@@ -106,12 +102,12 @@ public class User {
         this.role = role;
     }
 
-    public LocalDateTime getJoined_date() {
-        return joined_date;
+    public LocalDateTime getJoinedDate() {
+        return joinedDate;
     }
 
-    public void setJoined_date(LocalDateTime joined_date) {
-        this.joined_date = joined_date;
+    public void setJoinedDate(LocalDateTime joinedDate) {
+        this.joinedDate = joinedDate;
     }
 
     @JsonIgnore

@@ -2,6 +2,7 @@ package com.project.db.service;
 
 import com.project.db.entity.NewWord;
 import com.project.db.entity.User;
+import com.project.db.error.NotFoundException;
 import com.project.db.model.request.NewWordCreateRequest;
 import com.project.db.model.request.NewWordUpdateRequest;
 import com.project.db.model.response.NewWordResponse;
@@ -26,7 +27,7 @@ public class NewWordService {
 
     public NewWord findById(String Id){
         return newWordRepository.findById(Id).orElseThrow(
-                () -> new RuntimeException("User not found with id " + Id)
+                () -> new NotFoundException("User not found with id " + Id)
                 );
     }
 
@@ -45,12 +46,12 @@ public class NewWordService {
         return NewWord2NewWordResponse(newWord);
     }
 
-    public NewWordResponse updateNewWord(NewWordUpdateRequest newWordUpdateRequest){
-        NewWord byId = findById(newWordUpdateRequest.wordId());
-        byId.setWrittenForm(newWordUpdateRequest.writtenForm());
-        byId.setPartOfSpeech(newWordUpdateRequest.partOfSpeech());
-        byId.setDefinition(newWordUpdateRequest.definition());
-        return NewWord2NewWordResponse(byId);
+    public NewWordResponse updateNewWord(NewWordUpdateRequest request){
+        NewWord newWord = findById(request.wordId());
+        newWord.setWrittenForm(request.writtenForm());
+        newWord.setPartOfSpeech(request.partOfSpeech());
+        newWord.setDefinition(request.definition());
+        return NewWord2NewWordResponse(newWord);
     }
 
     public NewWordResponse NewWord2NewWordResponse(NewWord newWord){
@@ -69,7 +70,7 @@ public class NewWordService {
         User user = userRepository.findById(
                         request.userId())
                 .orElseThrow(
-                        () -> new RuntimeException("User not found with id " + request.userId()
+                        () -> new NotFoundException("User not found with id " + request.userId()
                         )
                 );
         newWord.setUser(user);
@@ -78,7 +79,6 @@ public class NewWordService {
         newWord.setStatus(Status.REQUESTED);
         newWord.setCreatedDate(time);
         newWord.setDefinition(request.definition());
-        newWord.setConfirmedDate(time);
         return newWord;
     }
 }
