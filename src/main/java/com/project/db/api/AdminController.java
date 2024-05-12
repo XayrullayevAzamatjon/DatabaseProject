@@ -1,5 +1,6 @@
 package com.project.db.api;
 
+import com.project.db.entity.Entry;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.service.AdminService;
 import com.project.db.utils.Status;
@@ -25,12 +26,16 @@ public class AdminController {
         return adminService.findAllRequestedWords();
     }
     @GetMapping("/search/{query}")
-    public List<NewWordResponse> findAllSearchedWords(@PathVariable String query){
+    public List<Entry> findAllSearchedWords(@PathVariable String query){
         return adminService.searchNewWords(query);
     }
     @GetMapping("/status/{status}")
     public List<NewWordResponse> findAllStatusWords(@PathVariable Status status){
         return adminService.findByStatus(status);
+    }
+    @GetMapping("/find-largest")
+    public String findLargestId(){
+        return adminService.generateEntryId();
     }
 
     @GetMapping("/confirm/{newWordId}")

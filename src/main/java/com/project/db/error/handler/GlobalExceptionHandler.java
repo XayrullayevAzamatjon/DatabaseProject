@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -31,12 +32,18 @@ public class GlobalExceptionHandler {
             IllegalArgumentException.class,
             IllegalStateException.class,
             NullPointerException.class,
-            RuntimeException.class,
-            NotFoundException.class
+            RuntimeException.class
     })
     public ResponseEntity<ErrorResponse> handleBadRequest(final RuntimeException e, final WebRequest webRequest){
 
         return constructExceptionResponse(e,webRequest,HttpStatus.BAD_REQUEST);
+    }
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler({
+            NotFoundException.class
+    })
+    public ResponseEntity<ErrorResponse> handleNotFound(final RuntimeException e, final WebRequest webRequest){
+        return constructExceptionResponse(e,webRequest,HttpStatus.NOT_FOUND);
     }
 
 

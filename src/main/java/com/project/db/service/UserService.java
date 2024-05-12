@@ -3,8 +3,10 @@ package com.project.db.service;
 import com.project.db.entity.*;
 import com.project.db.error.AlreadyExistsException;
 import com.project.db.error.NotFoundException;
+import com.project.db.model.request.LoginRequest;
 import com.project.db.model.request.UserCreateRequest;
 import com.project.db.model.request.UserUpdateRequest;
+import com.project.db.model.response.LoginResponse;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.model.response.UserResponse;
 import com.project.db.repository.UserRepository;
@@ -50,6 +52,32 @@ public class UserService {
         userRepository.save(user);
         LOGGER.info("User created with id {}", user.getId());
         return User2UserResponse(user);
+    }
+
+    public LoginResponse login(LoginRequest request) {
+        boolean exists = userRepository.existsByEmail(request.email());
+        if (exists){
+            User user = userRepository
+                    .findByEmail(request.email())
+                    .orElseThrow(
+                            () ->
+                                    new NotFoundException("User Not Found with email: " + request.email())
+                    );
+            String password = user.getPassword();
+            if (password.equals(request.password())){
+                LOGGER.info("User logged in successfully with email [{}] and password[{}].", request.email(),request.password());
+                return new LoginResponse("Email and password is correct",Boolean.TRUE);
+            }
+            else {
+                LOGGER.info("User could not be logged in with email [{}] and password[{}].", request.email(),request.password());
+                return new LoginResponse("Password is incorrect",Boolean.FALSE);
+            }
+
+        }
+        else {
+            LOGGER.info("User could not be logged in with email [{}].", request.email());
+            return new LoginResponse("There is no user with email ["+request.email()+"]",Boolean.FALSE);
+        }
     }
 
     public UserResponse update(UserUpdateRequest updateRequest){

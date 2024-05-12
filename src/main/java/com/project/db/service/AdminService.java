@@ -35,13 +35,18 @@ public class AdminService {
     public List<NewWordResponse> findAllRequestedWords(){
         return  newWordRepository.findAllRequestedWords().stream().map(this::NewWord2NewWordResponse).toList();
     }
-
-    public List<NewWordResponse> searchNewWords(String query){
-        return newWordRepository
+//TODO Entry should not be return as a response . Create Entry Response instead
+    public List<Entry> searchNewWords(String query){
+        return entryRepository
                 .findByWrittenFormContainingIgnoreCase(query)
                 .stream()
-                .map(this::NewWord2NewWordResponse)
                 .toList();
+    }
+
+    public String generateEntryId() {
+        Integer maxNumericId = entryRepository.findMaxNumericId();
+        int nextNumericId = (maxNumericId != null) ? maxNumericId + 1 : 0;
+        return "w" + nextNumericId;
     }
     public List<NewWordResponse> findByStatus(Status status){
         return newWordRepository
@@ -66,9 +71,7 @@ public class AdminService {
                 .orElseThrow(
                         ()->new NotFoundException("Word with id " + newWordId + " not found")
                 );
-        LocalDateTime time = LocalDateTime.now();
         newWord.setStatus(Status.DENIED);
-        newWord.setConfirmedDate(time);
         newWordRepository.save(newWord);
         return newWord.getStatus();
     }
@@ -80,11 +83,11 @@ public class AdminService {
                         ()->new NotFoundException("Word with id " + newWordId + " not found")
                 );
         newWord.setStatus(Status.CONFIRMED);
+        newWord.setConfirmedDate(LocalDateTime.now());
         newWordRepository.save(newWord);
 
         Entry entry = new Entry();
-        UUID uuid1 = UUID.randomUUID();
-        entry.setEntryId(uuid1.toString());
+        entry.setEntryId(generateEntryId());
         entry.setWrittenForm(newWord.getWrittenForm());
         entry.setPartOfSpeech(newWord.getPartOfSpeech());
         entryRepository.save(entry);
