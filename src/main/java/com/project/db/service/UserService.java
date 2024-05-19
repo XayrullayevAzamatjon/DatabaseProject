@@ -11,6 +11,7 @@ import com.project.db.model.response.NewWordResponse;
 import com.project.db.model.response.UserResponse;
 import com.project.db.repository.UserRepository;
 import com.project.db.utils.Role;
+import com.project.db.utils.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -91,8 +92,9 @@ public class UserService {
         return User2UserResponse(user);
     }
 
-    public List<NewWordResponse> showNewWords(String Id){
+    public List<NewWordResponse> userWordsByStatus(String Id, Status status){
         return findById(Id).getNewWordList().stream()
+                .filter(newWord -> newWord.getStatus().equals(status))
                 .map(this::NewWord2NewWordResponse)
                 .toList();
     }

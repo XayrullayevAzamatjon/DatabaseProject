@@ -8,6 +8,7 @@ import com.project.db.model.response.LoginResponse;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.model.response.UserResponse;
 import com.project.db.service.UserService;
+import com.project.db.utils.Status;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,8 +48,8 @@ public class UserController {
         return userService.update(userUpdateRequest);
     }
 
-    @GetMapping("/new-words/{userId}")
-    public List<NewWordResponse> showNewWords(@PathVariable String userId){
-        return userService.showNewWords(userId);
+    @GetMapping("/new-words/{userId}/{status}")
+    public List<NewWordResponse> showNewWords(@PathVariable String userId, @PathVariable Status status){
+        return userService.userWordsByStatus(userId,status);
     }
 }
