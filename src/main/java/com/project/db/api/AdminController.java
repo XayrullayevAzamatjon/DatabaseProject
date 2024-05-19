@@ -1,13 +1,11 @@
 package com.project.db.api;
 
 import com.project.db.entity.Entry;
+import com.project.db.model.request.RelationRequest;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.service.AdminService;
 import com.project.db.utils.Status;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,9 +36,9 @@ public class AdminController {
         return adminService.generateEntryId();
     }
 
-    @GetMapping("/confirm/{newWordId}")
-    public Status confirmNewWord(@PathVariable String newWordId){
-        return adminService.confirmNewWord(newWordId);
+    @PostMapping("/confirm/{newWordId}")
+    public Status confirmNewWord(@PathVariable String newWordId ,@RequestBody RelationRequest request){
+        return adminService.confirmNewWord(newWordId,request);
     }
 
     @GetMapping("/denied/{newWordId}")

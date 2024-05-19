@@ -1,7 +1,6 @@
 package com.project.db.entity;
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "Relations")
 public class Relations {
@@ -11,12 +10,11 @@ public class Relations {
     private Long id;
 
     @ManyToOne
-    @MapsId("synsetId")
-    @JoinColumn(name = "Synset_id", referencedColumnName = "Synset_id")
+    @JoinColumn(name = "Synset_id", nullable = false)
     private Synset synset;
 
     @ManyToOne
-    @JoinColumn(name = "target_synset_id", referencedColumnName = "Synset_id")
+    @JoinColumn(name = "target_synset_id", nullable = false)
     private Synset targetSynset;
 
     @Column(name = "relType")

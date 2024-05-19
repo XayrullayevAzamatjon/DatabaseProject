@@ -2,6 +2,7 @@ package com.project.db.service;
 
 import com.project.db.entity.*;
 import com.project.db.error.NotFoundException;
+import com.project.db.model.request.RelationRequest;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.repository.*;
 import com.project.db.utils.Status;
@@ -77,40 +78,64 @@ public class AdminService {
     }
 
     @Transactional
-    public Status confirmNewWord(String newWordId){
+    public Status confirmNewWord(String newWordId, RelationRequest request) {
+        // Fetch the NewWord entity
         NewWord newWord = newWordRepository.findById(newWordId)
-                .orElseThrow(
-                        ()->new NotFoundException("Word with id " + newWordId + " not found")
-                );
+                .orElseThrow(() -> new NotFoundException("Word with id " + newWordId + " not found"));
+
+        // Update status and confirmation date
         newWord.setStatus(Status.CONFIRMED);
         newWord.setConfirmedDate(LocalDateTime.now());
         newWordRepository.save(newWord);
 
+        // Create a new Entry entity
         Entry entry = new Entry();
-        entry.setEntryId(generateEntryId());
+        entry.setEntryId(UUID.randomUUID().toString());
         entry.setWrittenForm(newWord.getWrittenForm());
         entry.setPartOfSpeech(newWord.getPartOfSpeech());
-        entryRepository.save(entry);
+        Entry savedEntry = entryRepository.save(entry);
 
+        // Create a new Synset entity
         Synset synset = new Synset();
-        UUID uuid2 = UUID.randomUUID();
-        synset.setSynsetId(uuid2.toString());
+        synset.setSynsetId(UUID.randomUUID().toString());
         synset.setPartOfSpeech(newWord.getPartOfSpeech());
         synset.setDefinition(newWord.getDefinition());
-        synsetRepository.save(synset);
+        Synset savedSynset = synsetRepository.save(synset);
 
+        // Create a new Sense entity
         User user = newWord.getUser();
         Sense sense = new Sense();
-        UUID uuid3 = UUID.randomUUID();
-        sense.setSenseId(uuid3.toString());
-        sense.setEntry(entry);
-        sense.setSynset(synset);
+        sense.setSenseId(UUID.randomUUID().toString());
+        sense.setEntry(savedEntry);
+        sense.setSynset(savedSynset);
         sense.getUserSet().add(user);
-        senseRepository.save(sense);
+        Sense savedSense = senseRepository.save(sense);
 
-        user.getUserSense().add(sense);
+        // Update user senses
+        user.getUserSense().add(savedSense);
         userRepository.save(user);
 
+        // Create relations between synsets
+        Relations relations = new Relations();
+        relations.setRelType(request.relType());
+        relations.setSynset(savedSynset);  // Set the source synset
+        Synset targetSynset = synsetRepository.findById(request.targetSynsetId())
+                .orElseThrow(() -> new NotFoundException("Synset with id " + request.targetSynsetId() + " not found"));
+        relations.setTargetSynset(targetSynset);  // Set the target synset
+
+        // Debugging statements to ensure synset and targetSynset are not null
+        if (relations.getSynset() == null) {
+            throw new RuntimeException("Source synset is null.");
+        }
+        if (relations.getTargetSynset() == null) {
+            throw new RuntimeException("Target synset is null.");
+        }
+
+        relationsRepository.save(relations);
+
+        // Return the status of the new word
         return newWord.getStatus();
     }
+
+
 }
