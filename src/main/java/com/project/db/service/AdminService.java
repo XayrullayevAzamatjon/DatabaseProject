@@ -1,6 +1,7 @@
 package com.project.db.service;
 
 import com.project.db.entity.*;
+import com.project.db.error.AlreadyExistsException;
 import com.project.db.error.NotFoundException;
 import com.project.db.model.request.RelationRequest;
 import com.project.db.model.response.NewWordResponse;
@@ -8,6 +9,7 @@ import com.project.db.repository.*;
 import com.project.db.utils.Status;
 import jakarta.transaction.Transactional;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -72,6 +74,13 @@ public class AdminService {
                 .orElseThrow(
                         ()->new NotFoundException("Word with id " + newWordId + " not found")
                 );
+
+        if(newWord.getStatus().equals(Status.DENIED)){
+            throw new AlreadyExistsException("Word with id " + newWordId + " already denied");
+        }
+        if (newWord.getStatus() == Status.CONFIRMED){
+            throw new AlreadyExistsException("Word with id " + newWordId + " already confirmed");
+        }
         newWord.setStatus(Status.DENIED);
         newWordRepository.save(newWord);
         return newWord.getStatus();
@@ -82,6 +91,13 @@ public class AdminService {
         // Fetch the NewWord entity
         NewWord newWord = newWordRepository.findById(newWordId)
                 .orElseThrow(() -> new NotFoundException("Word with id " + newWordId + " not found"));
+        //Check status is Requested
+        if(newWord.getStatus() == Status.CONFIRMED){
+             throw new AlreadyExistsException("Word with id " + newWordId + " already confirmed");
+        }
+        if (newWord.getStatus() == Status.DENIED){
+            throw new AlreadyExistsException("Word with id " + newWordId + " already denied");
+        }
 
         // Update status and confirmation date
         newWord.setStatus(Status.CONFIRMED);
