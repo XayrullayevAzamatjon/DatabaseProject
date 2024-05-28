@@ -1,8 +1,9 @@
 package com.project.db.utils;
 
 public enum PartOfSpeech {
-    NOUN,
-    ADJECTIVE,
-    ADVERB,
-    VERB
+    noun,
+    adjective,
+    adverb,
+    verb,
+    adjective_satellite
 }

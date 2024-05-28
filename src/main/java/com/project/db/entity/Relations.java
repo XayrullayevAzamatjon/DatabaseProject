@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 public class Relations {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "Synset_id", nullable = false)
@@ -20,13 +19,7 @@ public class Relations {
     @Column(name = "relType")
     private String relType;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Synset getSynset() {
         return synset;
@@ -34,6 +27,14 @@ public class Relations {
 
     public void setSynset(Synset synset) {
         this.synset = synset;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Synset getTargetSynset() {

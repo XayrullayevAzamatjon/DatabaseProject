@@ -5,6 +5,10 @@ import com.project.db.model.request.RelationRequest;
 import com.project.db.model.response.NewWordResponse;
 import com.project.db.service.AdminService;
 import com.project.db.utils.Status;
+import org.hibernate.annotations.Parameter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +28,9 @@ public class AdminController {
         return adminService.findAllRequestedWords();
     }
     @GetMapping("/search/{query}")
-    public List<Entry> findAllSearchedWords(@PathVariable String query){
-        return adminService.searchNewWords(query);
+    public List<Entry> findAllSearchedWords(@PathVariable String query, @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size){
+        return adminService.searchNewWords(query, PageRequest.of(page, size));
     }
     @GetMapping("/status/{status}")
     public List<NewWordResponse> findAllStatusWords(@PathVariable Status status){

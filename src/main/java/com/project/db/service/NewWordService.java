@@ -2,10 +2,12 @@ package com.project.db.service;
 
 import com.project.db.entity.NewWord;
 import com.project.db.entity.User;
+import com.project.db.error.AlreadyExistsException;
 import com.project.db.error.NotFoundException;
 import com.project.db.model.request.NewWordCreateRequest;
 import com.project.db.model.request.NewWordUpdateRequest;
 import com.project.db.model.response.NewWordResponse;
+import com.project.db.repository.EntryRepository;
 import com.project.db.repository.NewWordRepository;
 import com.project.db.repository.UserRepository;
 import com.project.db.utils.Status;
@@ -19,10 +21,12 @@ import java.util.UUID;
 public class NewWordService {
     private final NewWordRepository newWordRepository;
     private final UserRepository userRepository;
+    private final EntryRepository entryRepository;
 
-    public NewWordService(NewWordRepository newWordRepository, UserRepository userRepository) {
+    public NewWordService(NewWordRepository newWordRepository, UserRepository userRepository, EntryRepository entryRepository) {
         this.newWordRepository = newWordRepository;
         this.userRepository = userRepository;
+        this.entryRepository = entryRepository;
     }
 
     public NewWord findById(String Id){
@@ -39,9 +43,23 @@ public class NewWordService {
                 .toList();
     }
 
-    public NewWordResponse addNewWord(NewWordCreateRequest newWordCreateRequest){
+    public NewWordResponse addNewWord(NewWordCreateRequest request){
 
-        NewWord newWord = NewWordCreateRequest2NewWord(newWordCreateRequest);
+        //Check word is already exist
+        if(entryRepository.existsByWrittenFormAndPartOfSpeech(request.writtenForm(),request.partOfSpeech())){
+            throw new AlreadyExistsException("Word with written form ["+request.writtenForm()+"] already exist");
+        }
+        if (newWordRepository.existsByWrittenFormAndPartOfSpeech(request.writtenForm(),request.partOfSpeech())){
+            NewWord word = newWordRepository.findByWrittenForm(request.writtenForm());
+            Status status = word.getStatus();
+            if (status.equals(Status.DENIED)){
+                throw new RuntimeException("Word with written form ["+request.writtenForm()+"] already denied");
+            }
+            if (status.equals(Status.REQUESTED)){
+                throw new AlreadyExistsException("Word with written form ["+request.writtenForm()+"] already PENDING to confirm");
+            }
+        }
+        NewWord newWord = NewWordCreateRequest2NewWord(request);
         newWordRepository.save(newWord);
         return NewWord2NewWordResponse(newWord);
     }

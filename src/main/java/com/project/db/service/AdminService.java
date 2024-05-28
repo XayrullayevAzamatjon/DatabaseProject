@@ -10,6 +10,7 @@ import com.project.db.utils.Status;
 import jakarta.transaction.Transactional;
 
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,9 +40,9 @@ public class AdminService {
         return  newWordRepository.findAllRequestedWords().stream().map(this::NewWord2NewWordResponse).toList();
     }
 //TODO Entry should not be return as a response . Create Entry Response instead
-    public List<Entry> searchNewWords(String query){
+    public List<Entry> searchNewWords(String query, Pageable pageable){
         return entryRepository
-                .findByWrittenFormContainingIgnoreCase(query)
+                .findByWrittenFormContainingIgnoreCase(query,pageable)
                 .stream()
                 .toList();
     }
@@ -138,6 +139,7 @@ public class AdminService {
         Synset targetSynset = synsetRepository.findById(request.targetSynsetId())
                 .orElseThrow(() -> new NotFoundException("Synset with id " + request.targetSynsetId() + " not found"));
         relations.setTargetSynset(targetSynset);  // Set the target synset
+        relations.setId(targetSynset.getSynsetId()+request.relType()+savedSynset.getSynsetId());
 
         // Debugging statements to ensure synset and targetSynset are not null
         if (relations.getSynset() == null) {
